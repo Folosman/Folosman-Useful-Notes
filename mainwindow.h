@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 #include <QSerialPort>
-// #include <QThread>
 #include "readrzm.h"
 #include "decoderhamming.h"
 #include "calculationoutput.h"
@@ -48,88 +47,10 @@ private:
 
     CalculationOutput calculationOutput;
 
-    uchar marker[2] = {0x1B, 0x80};
+    uchar marker[2] = {0xFF, 0xFF};
 
-    uchar endMarker[2] = {0x1B,0x03};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // 0x01
-    QByteArray portFreqInsert;//unsigned short
-
-    //0x02
-    QByteArray portTelemetryEnable;//bool
-
-    //0x03
-    QByteArray portSpectreEnable;//bool
-
-    //0x04
-    QByteArray receiverValue;
-    QByteArray portFreq;//unsigned int
-    QByteArray portRegim;//bool
-    QByteArray portSpectre;//bool
-    QByteArray portRssi;//int
-    QByteArray portVoltageUsb;//int
-    QByteArray portVoltageMc;//int
-    QByteArray portVoltageRu;//int
-    QByteArray portVoltageOu;//int
-    QByteArray portTemperature;//int
-
-    //0x10
-    QByteArray telemetryValue;
-    QByteArray timeOut;//int
-    QByteArray portTelemetryRssi;//int
-    QByteArray portTelemetryFreq;//int
-    QByteArray portTelemetryDispFreq;//int
-    QByteArray portTelemetry;//QByteArray
-
-    //0x11
-    QByteArray spectrumValue;
-    QByteArray portDataSpectre;
+    uchar endMarker[2] = {0xFF,0xFF};
 
     QTimer *timer;
 };
-
-// class InitializationSerialPort : public QObject
-// {
-//     Q_OBJECT
-//     QThread initThread;
-// public:
-//     InitializationSerialPort()
-//     {
-//         MainWindow *init = new MainWindow;
-//         init->moveToThread(&initThread);
-//         connect(&initThread, &QThread::finished, init, &QObject::deleteLater);
-//     }
-//     ~InitializationSerialPort()
-//     {
-//         initThread.quit();
-//         initThread.wait();
-//     }
-// };
 #endif // MAINWINDOW_H
