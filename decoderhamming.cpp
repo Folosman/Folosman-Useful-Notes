@@ -8,19 +8,10 @@ DecoderHamming::DecoderHamming(QObject *parent)
 
 }
 
-
 QByteArray DecoderHamming::decode(const QByteArray &data)
 {
 
-
-
-
-
-
-
-
     QByteArray decodedData;
-    qDebug() << data << "!!!";
     for(char byte : data)
     {
         uchar byteValue = static_cast<uchar>(byte);
@@ -51,7 +42,5 @@ QByteArray DecoderHamming::decode(const QByteArray &data)
 
         decodedData.append(static_cast<char>(data));
     }
-
-    qDebug() << decodedData;
     return decodedData;
 }
