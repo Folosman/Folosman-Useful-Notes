@@ -3,9 +3,6 @@
 
 #include <QMainWindow>
 #include <QSerialPort>
-#include "readrzm.h"
-#include "decoderhamming.h"
-#include "calculationoutput.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
