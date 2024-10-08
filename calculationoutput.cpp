@@ -9,9 +9,6 @@ CalculationOutput::CalculationOutput(QObject *parent)
 
 }
 
-
-
-
 std::tuple<double, double, double> CalculationOutput::enuToAes(float a, float b, float c)
 {
     double slantRange       = sqrt(pow(a, 2) + pow(b, 2) + pow(c, 2));
@@ -51,8 +48,6 @@ std::tuple<double, double, double> CalculationOutput::ecefToGeodetic(double x, d
     }
 
     PJ *transfromerDegrees = proj_normalize_for_visualization(context, transformer);
-
-
     /*  destructor  */
     proj_destroy(transformer);
     transformer = transfromerDegrees;
@@ -85,7 +80,6 @@ std::tuple<double, double, double> CalculationOutput::geodeticToenu(double lat, 
                                            "+proj=geocent +ellps=WGS84 +datum=WGS84",
                                            NULL);
 
-
     if(transformer == nullptr)
     {
         qDebug() << "Error transformer not created";
@@ -98,7 +92,6 @@ std::tuple<double, double, double> CalculationOutput::geodeticToenu(double lat, 
 
     PJ_COORD geodeticCoordOrg   = proj_coord(lon_org, lat_org, alt_org, 0);
     PJ_COORD ecefCoordOrg       = proj_trans(transformer, PJ_FWD, geodeticCoordOrg);
-
 
 
     /*      Destructors     */
@@ -125,25 +118,17 @@ std::tuple<double, double, double> CalculationOutput::geodeticToenu(double lat, 
         }};
 
 
-
     double enuX = rotMatrix[0][0] * dx + rotMatrix[0][1] * dy + rotMatrix[0][2] * dz;
     double enuY = rotMatrix[1][0] * dx + rotMatrix[1][1] * dy + rotMatrix[1][2] * dz;
     double enuZ = rotMatrix[2][0] * dx + rotMatrix[2][0] * dy + rotMatrix[2][0] * dz;
-    ////*           CRINGE          *////
-    // std::array<double, 3> enu =
-    // {
-    //     rotMatrix[0][0] * dx + rotMatrix[0][1] * dy + rotMatrix[0][2] * dz,
-    //     rotMatrix[1][0] * dx + rotMatrix[1][1] * dy + rotMatrix[1][2] * dz,
-    //     rotMatrix[2][0] * dx + rotMatrix[2][0] * dy + rotMatrix[2][0] * dz
 
-    // };
     return std::make_tuple(enuX, enuY, enuZ);
 }
 
 std::tuple<double, double, double> ecefToElli(double x, double y, double z)
 {
-    float earthA = 6378137.0;
-    float earthB = 6356752.31424518;
+    float earthA = 6378137.0;               // расстояние до центра земли по экватору
+    float earthB = 6356752.31424518;        // расстояние до центра земли на полюсе
 
     double earth_a2_b2  = earthA * earthA - earthB * earthB;
     double e2       = earth_a2_b2 / (earthA * earthA);
@@ -192,7 +177,7 @@ void CalculationOutput::checkingServiceability(int usbVoltage, int mcuVoltage, i
 
 
 
-/*          Я УЖЕ ГОВОРИЛ, ЧТО ТАКОЕ БЕЗУМИЕ?           */
+            /*          !!!БЕЗУМИЕ!!!           */
 
 QString CalculationOutput::latitudeProcessing(float latitudeValue)
 {
@@ -461,50 +446,3 @@ double CalculationOutput::displaySignalPercentLevel(int rssi)
 
     return percent;
 }
-/*
-std::array<double, 3> geodecticToenu(double lat, double lon, double alt,
-                                    double lat_org, double lon_org, double alt_org)
-{
-    PJ_CONTEXT *context = proj_context_create();
-    PJ *transformer     = proj_create_crs_to_crs(context,
-                                           "+proj=latlong +ellps=WGS84 +datum=WGS84",
-                                           "+proj=geocent +ellps=WGS84 +datum=WGS84",
-                                           NULL);
-
-
-    if(transformer == nullptr)
-    {
-        qDebug() << "Error transformer not created";
-        return {0.0, 0.0, 0.0};
-
-    }
-
-    PJ_COORD geodeticCoord  = proj_coord(lon, lat, alt, 0);
-    PJ_COORD ecefCoord      = proj_trans(transformer, PJ_FWD, geodeticCoord);
-
-    PJ_COORD geodeticCoordOrg   = proj_coord(lon_org, lat_org, alt_org, 0);
-    PJ_COORD ecefCoordOrg       = proj_trans(transformer, PJ_FWD, geodeticCoordOrg);
-
-
-
-    proj_destroy(transformer);
-    proj_context_destroy(context);
-
-
-    double dx = ecefCoord.xyz.x - ecefCoordOrg.xyz.x;
-    double dy = ecefCoord.xyz.y - ecefCoordOrg.xyz.y;
-    double dz = ecefCoord.xyz.z - ecefCoordOrg.xyz.z;
-
-
-    double sin_lat = std::sin(DEG_TO_RAD * lat_org);
-    double cos_lat = std::cos(DEG_TO_RAD * lat_org);
-    double sin_lon = std::sin(DEG_TO_RAD * lon_org);
-    double cos_lon = std::cos(DEG_TO_RAD * lon_org);
-
-
-    std::array<std::array<double, 3>, 3> rotMatrix =
-        {{
-            {-sin_lon, cos_lon,0},
-            {-sin_lat * cos_lon, -sin_lat * sin_lon, cos_lat},
-            {cos_lat * cos_lon, cos_lat * sin_lon, sin_lat}
-        }}; */
