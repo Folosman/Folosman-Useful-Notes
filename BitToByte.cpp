@@ -13,7 +13,7 @@ std::vector<uint8_t> bitsToBytes(const std::vector<bool>& bits) {
         for (size_t bit = 0; bit < 8; ++bit) {
             size_t bitIndex = i * 8 + bit;
             if (bitIndex < bits.size() && bits[bitIndex]) {
-                byte |= (1 << bit);
+                byte |= (1 << (bit & 0xFF));
             }
         }
         bytes.push_back(byte);
